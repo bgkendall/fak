@@ -55,6 +55,10 @@ static uint8_t process_eager(
         }
         break;
     }
+#else
+    (void)ks;
+    (void)behavior_flags;
+    (void)event;
 #endif
     return 0;
 }
@@ -126,7 +130,7 @@ uint8_t hold_tap_handle_event(fak_key_state_t *ks, uint8_t handle_event, int16_t
 #endif
         process_eager(ks, behavior->flags, EAGER_START);
         break;
-    
+
     case HANDLE_EVENT_INCOMING_EVENT:
         {} // SDCC doesn't let me compile without this for some reason
         fak_key_event_t *ev_in = key_event_queue_bfront();
@@ -223,7 +227,7 @@ uint8_t hold_tap_handle_event(fak_key_state_t *ks, uint8_t handle_event, int16_t
 
             ks->key_code &= KEY_CODE_TAP_MASK;
             return HANDLE_RESULT_MAPPED;
-        
+
         case STATE_POST_IMMEDIATE_TAP:
             if (!same_key_idx) {
                 return HANDLE_RESULT_COMPLETED;
