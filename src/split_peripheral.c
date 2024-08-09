@@ -80,11 +80,11 @@ void keyboard_init(void) {
     ES = 1;
 #endif
 
-    keyboard_init_user(void);
+    keyboard_init_user();
 }
 
 void keyboard_scan(void) {
-    keyboard_scan_user(void);
+    keyboard_scan_user();
 
 #ifdef SPLIT_SOFT_SERIAL_PIN
     // Soft serial isn't interrupt-driven so we generously make way for it instead of continuously scanning
