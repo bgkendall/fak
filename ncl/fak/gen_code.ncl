@@ -31,7 +31,7 @@ let rec codegen = {
     |> std.array.map codegen_define
     |> std.array.filter (fun s => s != "")
     |> util.array.join "\n",
-  
+
   pin_def = fun i pin prefix =>
     let port = std.to_string (std.number.truncate (pin / 10)) in
     let port_idx = std.to_string (pin % 10) in
@@ -104,7 +104,7 @@ m%"
 
   %{
     if std.array.length ir.encoder_defs > 0 then
-      let defs = std.array.map (fun enc => 
+      let defs = std.array.map (fun enc =>
         {
           resolution = enc.resolution,
           key_idx_cw = enc.key_idx_cw,
@@ -164,7 +164,7 @@ let c_file =
       out_mapping
       |> util.array.enumerate
       |> std.array.filter (fun { index, value } => value >= 0)
-      |> std.array.map (fun { index, value } => 
+      |> std.array.map (fun { index, value } =>
           let pin_idx = std.array.at index ins in
           let key_idx = value in
           key_state_inform key_idx in_prefix pin_idx
@@ -210,7 +210,7 @@ m%"
     |> util.array.join "\n"
   }
 
-  void keyboard_init_user() {
+  void keyboard_init_user(void) {
   %{
     [[ir.kscan.cols, "COL"], [ir.kscan.rows, "ROW"]]
     |> std.array.flat_map (fun k =>
@@ -225,13 +225,13 @@ m%"
   }
   }
 
-  static void matrix_switch_delay() {
+  static void matrix_switch_delay(void) {
     for (uint8_t i = 16; i; i--) {
       __asm__ ("nop");
     }
   }
 
-  void keyboard_scan_user() {
+  void keyboard_scan_user(void) {
   // Direct pins
   %{
     ir.kscan.direct

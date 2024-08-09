@@ -24,7 +24,7 @@ void UART0_ISR() __interrupt(INT_NO_UART0) {
 }
 #endif
 
-static void UART0_init() {
+static void UART0_init(void) {
     // UART0 @ Timer1, 750k bps
     SM0 = 0;
     SM1 = 1;
@@ -42,7 +42,7 @@ static void UART0_init() {
 }
 #endif
 
-static void main() {
+static void main(void) {
     CLK_init();
 #if defined(SPLIT_ENABLE) && !defined(SPLIT_SOFT_SERIAL_PIN)
     UART0_init();

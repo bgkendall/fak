@@ -7,19 +7,19 @@
 
 __bit caps_word_state = 0;
 
-void caps_word_on() {
+void caps_word_on(void) {
     caps_word_state = 1;
 }
 
-void caps_word_off() {
+void caps_word_off(void) {
     caps_word_state = 0;
 }
 
-void caps_word_toggle() {
+void caps_word_toggle(void) {
     caps_word_state = !caps_word_state;
 }
 
-__bit caps_word_active() {
+__bit caps_word_active(void) {
     return caps_word_state;
 }
 

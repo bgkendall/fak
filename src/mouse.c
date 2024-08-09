@@ -25,7 +25,7 @@ void mouse_handle_key(uint16_t custom_code, uint8_t down) {
     }
 }
 
-void mouse_process() {
+void mouse_process(void) {
     if (scroll_direction != 0) {
         if (get_timer() >= scroll_at_time) {
             USB_EP3I_write(3, scroll_direction);

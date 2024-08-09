@@ -55,7 +55,7 @@ extern __code uint8_t split_periph_encoder_indices[SPLIT_PERIPH_ENCODER_COUNT];
 #endif
 #endif
 
-uint16_t get_last_tap_timestamp() {
+uint16_t get_last_tap_timestamp(void) {
     return last_tap_timestamp;
 }
 
@@ -78,7 +78,7 @@ static uint8_t key_check(uint8_t key_code) {
 
     for (uint8_t i = 2; i < 8; i++) {
         uint8_t c = USB_EP1I_read(i);
-        
+
         if (c == key_code && !(ret & 0x0F)) {
             ret |= i;
         }
@@ -95,7 +95,7 @@ static void register_mods(uint8_t mods, uint8_t down) {
 
     for (uint8_t i = 8; i;) {
         i--;
-        
+
         if (mods & (1 << i)) {
             if (down) {
                 strong_mods_ref_count[i] += 1;
@@ -203,7 +203,7 @@ static void subhandle(uint8_t handle_event) {
 #endif
     }
 
-    uint8_t future_type = get_future_type(ks->key_code);    
+    uint8_t future_type = get_future_type(ks->key_code);
 
     if (future_type == FUTURE_TYPE_NONE) {
         handle_non_future(ks->key_code, ev_front->pressed);
@@ -259,7 +259,7 @@ static void subhandle(uint8_t handle_event) {
     }
 }
 
-static void handle_key_events() {
+static void handle_key_events(void) {
     if (key_event_queue_get_bsize() == 0 && key_event_queue_get_size()) {
         subhandle(HANDLE_EVENT_PRE_SCAN);
         return;
@@ -361,7 +361,7 @@ void handle_non_future(uint32_t key_code, uint8_t down) {
         }
         break;
 #endif
-    
+
 #ifdef CUSTOM_KEYS_ENABLE
     case 0xE0: // Custom keycode
         {}
@@ -446,7 +446,7 @@ void tap_non_future(uint32_t key_code) {
 void key_state_inform(uint8_t key_idx, uint8_t down) {
     fak_key_state_t *ks = &key_states[key_idx];
     uint8_t last_down = (ks->status & KEY_STATUS_DEBOUNCE) >> 1;
-    
+
     if (last_down == down) {
         uint8_t last_pressed = ks->status & KEY_STATUS_DOWN;
         if (last_pressed == down) return;
@@ -493,7 +493,7 @@ exit:
 #endif
 }
 
-static void split_periph_scan() {
+static void split_periph_scan(void) {
     uint8_t i = 0;
 
     for (uint8_t b = 0; b < SPLIT_KEY_COUNT_BYTES; b++) {
@@ -522,7 +522,7 @@ static void split_periph_scan() {
 }
 #endif
 
-void keyboard_init() {
+void keyboard_init(void) {
     for (uint8_t i = KEY_COUNT; i;) {
         key_states[--i].status = 0;
     }
@@ -544,7 +544,7 @@ void keyboard_init() {
     keyboard_init_user();
 }
 
-void keyboard_scan() {
+void keyboard_scan(void) {
     keyboard_scan_user();
 #ifdef SPLIT_ENABLE
     split_periph_scan();

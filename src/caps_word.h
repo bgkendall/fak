@@ -5,11 +5,11 @@
 
 #include "ch55x.h"
 
-void caps_word_on();
-void caps_word_off();
-void caps_word_toggle();
+void caps_word_on(void);
+void caps_word_off(void);
+void caps_word_toggle(void);
 
-__bit caps_word_active();
+__bit caps_word_active(void);
 
 // Process the logic for caps word for the given key.
 //

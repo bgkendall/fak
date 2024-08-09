@@ -20,7 +20,7 @@ uint32_t get_real_key_code(uint8_t key_idx) {
     do {
         if (!is_layer_on(layer_idx))
             continue;
-        
+
         uint32_t key_code = key_map[layer_idx][key_idx];
 
         // Bail out if this keycode is not a hold-tap (e.g. tap dance)
@@ -45,7 +45,7 @@ uint32_t get_real_key_code(uint8_t key_idx) {
 
 #if LAYER_COUNT > 1
 
-uint8_t get_highest_layer_idx() {
+uint8_t get_highest_layer_idx(void) {
     for (uint8_t layer_idx = LAYER_COUNT - 1; layer_idx; layer_idx--) {
         if (is_layer_on(layer_idx))
             return layer_idx;
@@ -53,7 +53,7 @@ uint8_t get_highest_layer_idx() {
     return 0;
 }
 
-uint8_t get_default_layer_idx() {
+uint8_t get_default_layer_idx(void) {
     for (uint8_t layer_idx = 0; layer_idx < LAYER_COUNT; layer_idx++) {
         if (persistent_layer_state & (1 << layer_idx))
             return layer_idx;
@@ -61,7 +61,7 @@ uint8_t get_default_layer_idx() {
     return 0;
 }
 
-static void on_layer_state_change() {
+static void on_layer_state_change(void) {
 #if CONDITIONAL_LAYER_COUNT > 0
     for (uint8_t i = 0; i < CONDITIONAL_LAYER_COUNT; i++) {
         __code fak_conditional_layer_def_t *cl = &conditional_layers[i];
@@ -129,7 +129,7 @@ uint8_t is_layer_off(uint8_t layer_idx) {
 uint8_t get_trans_layer_exit_source_idx(uint8_t key_idx, uint8_t hold) {
     uint32_t mask = hold ? KEY_CODE_HOLD_LAYER_IDX_MODS_MASK : KEY_CODE_TAP_MASK;
     uint32_t code = hold ? KEY_CODE_HOLD_TRANS_LAYER_EXIT : KEY_CODE_TAP_TRANS_LAYER_EXIT;
-    
+
     uint8_t layer_idx = LAYER_COUNT;
 
     while (layer_idx--) {

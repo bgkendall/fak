@@ -314,7 +314,7 @@ __code uint8_t USB_STR3_DESCR[] = {
 #endif
 #endif
 
-static void USB_EP0_tx() {
+static void USB_EP0_tx(void) {
     UEP0_T_LEN = MIN(usb_tx_len, USB_EP0_SIZE);
 
     if (UEP0_T_LEN) {
@@ -324,7 +324,7 @@ static void USB_EP0_tx() {
     }
 }
 
-inline static void USB_EP0_SETUP() {
+inline static void USB_EP0_SETUP(void) {
     UEP0_CTRL = bUEP_R_TOG | bUEP_T_TOG;
 
     USB_SETUP_REQ *setupPacket = (USB_SETUP_REQ *) EP0_buffer;
@@ -398,16 +398,16 @@ inline static void USB_EP0_SETUP() {
                 return;
             }
             break;
-        
+
         case USB_SET_ADDRESS:
             usb_tx_len = setupPacket->wValueL;
             UDEV_CTRL &= ~bUD_GP_BIT;
             return;
-        
+
         case USB_SET_CONFIGURATION:
             USB_DEV_AD = (USB_DEV_AD & MASK_USB_ADDR) | (setupPacket->wValueL << 7); // bUDA_GP_BIT
             return;
-        
+
         case USB_GET_CONFIGURATION:
             EP0_buffer[0] = USB_DEV_AD >> 7; // bUDA_GP_BIT
             UEP0_T_LEN = 1;
@@ -418,7 +418,7 @@ inline static void USB_EP0_SETUP() {
             EP0_buffer[1] = 0;
             UEP0_T_LEN = 2;
             return;
-        
+
         case HID_GET_REPORT:
             if (setupPacket->bRequestType == (USB_REQ_TYP_IN | USB_REQ_TYP_CLASS | USB_REQ_RECIP_INTERF)) {
                 switch (setupPacket->wIndexL) {
@@ -447,7 +447,7 @@ inline static void USB_EP0_SETUP() {
                 }
             }
             break;
-        
+
         case HID_GET_PROTOCOL:
             if (setupPacket->bRequestType == (USB_REQ_TYP_IN | USB_REQ_TYP_CLASS | USB_REQ_RECIP_INTERF)) {
                 switch (setupPacket->wIndexL) {
@@ -464,7 +464,7 @@ inline static void USB_EP0_SETUP() {
                 }
              }
              break;
-        
+
         case HID_SET_PROTOCOL:
             if (setupPacket->bRequestType == (USB_REQ_TYP_OUT | USB_REQ_TYP_CLASS | USB_REQ_RECIP_INTERF)) {
                 switch (setupPacket->wIndexL) {
@@ -484,9 +484,9 @@ inline static void USB_EP0_SETUP() {
     UEP0_CTRL |= UEP_R_RES_STALL | UEP_T_RES_STALL;
 }
 
-inline static void USB_EP0_IN() {
+inline static void USB_EP0_IN(void) {
     if (!usb_tx_len) return;
-    
+
     if (UDEV_CTRL & bUD_GP_BIT) {
         // USB_GET_DESCRIPTOR
         USB_EP0_tx();
@@ -497,7 +497,7 @@ inline static void USB_EP0_IN() {
     }
 }
 
-inline static void USB_EP0_OUT() {}
+inline static void USB_EP0_OUT(void) {}
 
 uint8_t USB_EP1I_read(uint8_t idx) {
     IE_USB = 0;
@@ -513,16 +513,16 @@ void USB_EP1I_write(uint8_t idx, uint8_t value) {
     USB_EP1I_ready_send();
 }
 
-inline void USB_EP1I_ready_send() {
+inline void USB_EP1I_ready_send(void) {
     UEP1_CTRL = UEP1_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_ACK;
 }
 
-inline void USB_EP1I_send_now() {
+inline void USB_EP1I_send_now(void) {
     USB_EP1I_ready_send();
     while (!(UEP1_CTRL & UEP_T_RES_NAK));
 }
 
-inline static void USB_EP1_IN() {
+inline static void USB_EP1_IN(void) {
     UEP1_CTRL = UEP1_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_NAK;
 }
 
@@ -536,7 +536,7 @@ void USB_EP2I_write_now(uint8_t idx, uint16_t value) {
     while (!(UEP2_CTRL & UEP_T_RES_NAK));
 }
 
-inline static void USB_EP2_IN() {
+inline static void USB_EP2_IN(void) {
     UEP2_CTRL = UEP2_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_NAK;
 }
 #endif
@@ -556,21 +556,21 @@ void USB_EP3I_write(uint8_t idx, uint8_t value) {
     USB_EP3I_ready_send();
 }
 
-inline void USB_EP3I_ready_send() {
+inline void USB_EP3I_ready_send(void) {
     UEP3_CTRL = UEP3_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_ACK;
 }
 
-inline void USB_EP3I_send_now() {
+inline void USB_EP3I_send_now(void) {
     USB_EP3I_ready_send();
     while (!(UEP3_CTRL & UEP_T_RES_NAK));
 }
 
-inline static void USB_EP3_IN() {
+inline static void USB_EP3_IN(void) {
     UEP3_CTRL = UEP3_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_NAK;
 }
 #endif
 
-inline void USB_reset() {
+inline void USB_reset(void) {
     usb_tx_len = 0;
     hid_protocol_keyboard = 1;
 #ifdef MOUSE_KEYS_ENABLE
@@ -580,7 +580,7 @@ inline void USB_reset() {
 
 #pragma save
 #pragma nooverlay
-void USB_interrupt() {
+void USB_interrupt(void) {
     if (UIF_TRANSFER) {
         UEP0_T_LEN = 0;
         uint8_t endp = USB_INT_ST & MASK_UIS_ENDP;
@@ -589,7 +589,7 @@ void USB_interrupt() {
             case UIS_TOKEN_SETUP:
                 if (endp == 0) USB_EP0_SETUP();
                 break;
-            
+
             case UIS_TOKEN_IN:
                 switch (endp) {
                     case 0: USB_EP0_IN(); break;
@@ -602,7 +602,7 @@ void USB_interrupt() {
 #endif
                 }
                 break;
-            
+
             case UIS_TOKEN_OUT:
                 switch (endp) {
                     case 0: USB_EP0_OUT(); break;
@@ -622,7 +622,7 @@ void USB_interrupt() {
         UIF_TRANSFER = 0;
         UIF_BUS_RST  = 0;
     }
-        
+
     if (UIF_SUSPEND) {
         UIF_SUSPEND = 0;
         if (!(USB_MIS_ST & bUMS_SUSPEND)) USB_INT_FG = 0xFF;
@@ -630,7 +630,7 @@ void USB_interrupt() {
 }
 #pragma restore
 
-void USB_init() {
+void USB_init(void) {
     // Reset USB
     USB_CTRL |= bUC_RESET_SIE | bUC_CLR_ALL;
     USB_CTRL &= ~bUC_CLR_ALL;
@@ -651,7 +651,7 @@ void USB_init() {
     USB_reset();
 
     // Main init
-    USB_CTRL = bUC_DEV_PU_EN | bUC_INT_BUSY | bUC_DMA_EN; 
+    USB_CTRL = bUC_DEV_PU_EN | bUC_INT_BUSY | bUC_DMA_EN;
 #if CH55X == 2
     UDEV_CTRL = bUD_PD_DIS | bUD_PORT_EN;
 #elif CH55X == 9

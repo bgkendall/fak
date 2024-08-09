@@ -10,33 +10,33 @@ typedef struct {
 
 __xdata __at(XADDR_KEY_EVENT_QUEUE) fak_key_event_queue_t key_event_queue;
 
-inline uint8_t key_event_queue_get_size() {
+inline uint8_t key_event_queue_get_size(void) {
     return key_event_queue.size;
 }
 
-inline uint8_t key_event_queue_get_bsize() {
+inline uint8_t key_event_queue_get_bsize(void) {
     return key_event_queue.bsize;
 }
 
-inline uint8_t* key_event_queue_state() {
+inline uint8_t* key_event_queue_state(void) {
     return &key_event_queue.state;
 }
 
-inline fak_key_event_t* key_event_queue_front() {
+inline fak_key_event_t* key_event_queue_front(void) {
     return &key_event_queue.q[0];
 }
 
-inline fak_key_event_t* key_event_queue_bfront() {
+inline fak_key_event_t* key_event_queue_bfront(void) {
     return &key_event_queue.q[key_event_queue.size];
 }
 
-void key_event_queue_push() {
+void key_event_queue_push(void) {
     if (!key_event_queue.bsize) return;
     key_event_queue.size++;
     key_event_queue.bsize--;
 }
 
-void key_event_queue_pop() {
+void key_event_queue_pop(void) {
     if (!key_event_queue.size) return;
 
     for (uint8_t i = 0; i < (key_event_queue.size + key_event_queue.bsize - 1); i++) {
@@ -52,7 +52,7 @@ void key_event_queue_bpush(fak_key_event_t *ev) {
     key_event_queue.bsize++;
 }
 
-void key_event_queue_bpop() {
+void key_event_queue_bpop(void) {
     if (!key_event_queue.bsize) return;
 
     for (uint8_t i = 0; i < key_event_queue.bsize - 1; i++) {
@@ -61,12 +61,12 @@ void key_event_queue_bpop() {
     key_event_queue.bsize--;
 }
 
-void key_event_queue_breset() {
+void key_event_queue_breset(void) {
     key_event_queue.bsize += key_event_queue.size;
     key_event_queue.size = 0;
 }
 
-void key_event_queue_init() {
+void key_event_queue_init(void) {
     key_event_queue.size = 0;
     key_event_queue.bsize = 0;
     key_event_queue.state = 0;

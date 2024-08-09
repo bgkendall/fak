@@ -3,13 +3,13 @@
 
 #define SSP SPLIT_SOFT_SERIAL_PIN
 
-void soft_serial_init() {
+void soft_serial_init(void) {
     __asm
         setb SPLIT_SOFT_SERIAL_PIN
     __endasm;
 }
 
-void soft_serial_recv() {
+void soft_serial_recv(void) {
     soft_serial_did_not_respond = 1;
     __asm
         mov r0, #8
@@ -41,7 +41,7 @@ void soft_serial_recv() {
         // cpl 0xB2         ; for testing only
         rrc a               ; 1 cyc
         djnz r0, 00002$     ; if jump 4 else 2 cyc
-    
+
         mov r1, #0
         mov r1, #0
         mov r1, #0
@@ -71,7 +71,7 @@ void soft_serial_recv() {
     __endasm;
 }
 
-void soft_serial_send() {
+void soft_serial_send(void) {
     __asm
         mov dptr, #_soft_serial_sbuf
         movx a, @dptr
@@ -96,7 +96,7 @@ void soft_serial_send() {
         rrc a           ; 1 cyc
         mov SSP, c      ; 2 cyc
         djnz r0, 00001$ ; if jump 4 else 2 cyc
-    
+
         mov r1, #0
         mov r1, #0
         mov r1, #0

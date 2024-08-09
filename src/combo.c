@@ -79,7 +79,7 @@ void combo_push_key_event(uint8_t key_idx, uint8_t pressed) {
     for (uint8_t i = 0; i < combo_key_queue.size; i++) {
         if (key_idx != combo_key_queue.q[i].key_idx)
             continue;
-        
+
         // If it's owned, we let the combo processor handle it
         __bit owned = combo_key_queue.q[i].ref_count == REF_COUNT_OWNED;
         combo_key_queue_remove(i);
@@ -107,11 +107,11 @@ void combo_push_key_event(uint8_t key_idx, uint8_t pressed) {
         push_key_event(key_idx, 1);
         break;
     }
-    
+
     push_key_event(key_idx, 0);
 }
 
-void combo_handle() {
+void combo_handle(void) {
     // Reset ref counters except owned
     for (uint8_t i = combo_key_queue.size; i;) {
         uint8_t *ref_count = &combo_key_queue.q[--i].ref_count;
@@ -131,7 +131,7 @@ void combo_handle() {
             for (uint8_t k = 0; k < combo_key_queue.size; k++) {
                 if (combo_def.key_indices[j] != combo_key_queue.q[k].key_idx)
                     continue;
-                
+
                 // Bail out if we see an owned key, which means this combo is impossible to trigger for now
                 // This only applies to inactive combos
                 if (combo_state.state != 2 && combo_key_queue.q[k].ref_count == REF_COUNT_OWNED) {
@@ -163,11 +163,11 @@ void combo_handle() {
             for (uint8_t j = 0; j < combo_key_count; j++) {
                 if (!(pressed_keys & (1 << j)))
                     continue;
-                
+
                 for (uint8_t k = 0; k < combo_key_queue.size; k++) {
                     if (combo_def.key_indices[j] != combo_key_queue.q[k].key_idx)
                         continue;
-                    
+
                     if (will_own) {
                         combo_key_queue.q[k].ref_count = REF_COUNT_OWNED;
                     } else {
@@ -214,13 +214,13 @@ exit_outer:
             // This is done to preserve the keypress order
             break;
         }
-        
+
         push_key_event(combo_key_queue.q[i].key_idx, 1);
         combo_key_queue_remove(i);
     }
 }
 
-void combo_init() {
+void combo_init(void) {
     for (uint8_t i = COMBO_COUNT; i;) {
         combo_states[--i].state = 0;
     }
