@@ -30,6 +30,10 @@
 #include "soft_serial.h"
 #endif
 
+#include "rgbled.h"
+
+
+
 __xdata __at(XADDR_LAST_TAP_TIMESTAMP) uint16_t last_tap_timestamp = 0;
 __xdata __at(XADDR_KEY_STATES) fak_key_state_t key_states[KEY_COUNT];
 
@@ -78,7 +82,7 @@ static uint8_t key_check(uint8_t key_code) {
 
     for (uint8_t i = 2; i < 8; i++) {
         uint8_t c = USB_EP1I_read(i);
-        
+
         if (c == key_code && !(ret & 0x0F)) {
             ret |= i;
         }
@@ -95,7 +99,7 @@ static void register_mods(uint8_t mods, uint8_t down) {
 
     for (uint8_t i = 8; i;) {
         i--;
-        
+
         if (mods & (1 << i)) {
             if (down) {
                 strong_mods_ref_count[i] += 1;
@@ -203,7 +207,7 @@ static void subhandle(uint8_t handle_event) {
 #endif
     }
 
-    uint8_t future_type = get_future_type(ks->key_code);    
+    uint8_t future_type = get_future_type(ks->key_code);
 
     if (future_type == FUTURE_TYPE_NONE) {
         handle_non_future(ks->key_code, ev_front->pressed);
@@ -361,7 +365,7 @@ void handle_non_future(uint32_t key_code, uint8_t down) {
         }
         break;
 #endif
-    
+
 #ifdef CUSTOM_KEYS_ENABLE
     case 0xE0: // Custom keycode
         {}
@@ -387,6 +391,7 @@ void handle_non_future(uint32_t key_code, uint8_t down) {
                 break;
             case 4:
                 if (down) caps_word_toggle();
+
                 break;
 #endif
 #ifdef REPEAT_KEY_ENABLE
@@ -446,7 +451,7 @@ void tap_non_future(uint32_t key_code) {
 void key_state_inform(uint8_t key_idx, uint8_t down) {
     fak_key_state_t *ks = &key_states[key_idx];
     uint8_t last_down = (ks->status & KEY_STATUS_DEBOUNCE) >> 1;
-    
+
     if (last_down == down) {
         uint8_t last_pressed = ks->status & KEY_STATUS_DOWN;
         if (last_pressed == down) return;
@@ -540,6 +545,23 @@ void keyboard_init() {
 #if ENCODER_COUNT > 0
     encoder_init();
 #endif
+
+
+
+
+    neopixel_begin();
+    neopixel_setBrightness(255);
+    neopixel_setPixelColor(0, 0xFFFFFF);
+    neopixel_setPixelColor(1, 0x000000);
+    neopixel_setPixelColor(2, 0x000000);
+    neopixel_setPixelColor(3, 0x000000);
+    neopixel_setPixelColor(4, 0x000000);
+    neopixel_setPixelColor(5, 0x000000);
+    neopixel_show();
+
+
+
+
     key_event_queue_init();
     keyboard_init_user();
 }
@@ -556,5 +578,14 @@ void keyboard_scan() {
 #ifdef MOUSE_KEYS_ENABLE
     mouse_process();
 #endif
+
     handle_key_events();
+
+//
+//     #ifdef CAPS_WORD_ENABLE
+//         // check hasn't timed out
+//         if ((get_timer() - get_last_tap_timestamp()) > 5000) {
+//             caps_word_off();
+//         }
+//     #endif
 }
