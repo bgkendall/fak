@@ -46,8 +46,8 @@ let h_file = m%"
 
   #include "keyboard.h"
 
-  void keyboard_init_user();
-  void keyboard_scan_user();
+  void keyboard_init_user(void);
+  void keyboard_scan_user(void);
 "% in
 
 let side_central_defs =

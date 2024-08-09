@@ -5,14 +5,14 @@
 #ifdef SPLIT_SIDE_CENTRAL
 #include "usb.h"
 
-void USB_interrupt();
-void USB_ISR() __interrupt(INT_NO_USB) {
+void USB_interrupt(void);
+void USB_ISR(void) __interrupt(INT_NO_USB) {
     USB_interrupt();
 }
 #endif
 
-void TMR0_interrupt();
-void TMR0_ISR() __interrupt(INT_NO_TMR0) {
+void TMR0_interrupt(void);
+void TMR0_ISR(void) __interrupt(INT_NO_TMR0) {
     TMR0_interrupt();
 }
 
