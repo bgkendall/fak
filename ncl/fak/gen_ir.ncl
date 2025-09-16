@@ -268,9 +268,9 @@ let _central_defines = {
   STICKY_ENABLE = std.array.any (fun kc => kc.type == 'hold_tap && kc.data.tap.type == 'sticky) deep_keycodes,
 
   NEOPIXEL_ENABLE = false,
-  NEOPIXEL_PIN = "XXP1_2",
-  NEOPIXEL_PIN_PORT = (std.string.split "_" NEOPIXEL_PIN |> std.array.at 0) ++ "_ADDR",
-  NEOPIXEL_PIN_BIT =   std.string.split "_" NEOPIXEL_PIN |> std.array.at 1,
+  NEOPIXEL_PIN      = if NEOPIXEL_ENABLE then "P1_2" else false,
+  NEOPIXEL_PIN_PORT = if NEOPIXEL_ENABLE then (std.string.split "_" NEOPIXEL_PIN |> std.array.at 0) ++ "_ADDR" else false,
+  NEOPIXEL_PIN_BIT  = if NEOPIXEL_ENABLE then  std.string.split "_" NEOPIXEL_PIN |> std.array.at 1  else false,
   NUM_LEDS = 1,
 
   CUSTOM_KEYS_ENABLE = is_custom_keys_used,
