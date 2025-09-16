@@ -14,6 +14,8 @@ void set_caps_word_state(__bit new_state)
     {
         caps_word_state = new_state;
 
+#ifdef NEOPIXEL_ENABLE
+
         if (caps_word_state)
         {
             neopixel_setPixelColor(0, 0xFFFFFF);
@@ -33,6 +35,8 @@ void set_caps_word_state(__bit new_state)
             // neopixel_setPixelColor(5, 0x000000);
         }
         neopixel_show();
+
+#endif
     }
 }
 

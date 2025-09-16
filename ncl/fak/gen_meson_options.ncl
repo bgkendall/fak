@@ -13,7 +13,7 @@ let use_soft_serial = std.record.has_field "SPLIT_SOFT_SERIAL_PIN" ir.defines in
 
 {
   split = ir.defines.SPLIT_ENABLE,
-  extra_sources = as_sources 
+  extra_sources = as_sources
   {
     "src/hold_tap.c" = ir.defines.HOLD_TAP_ENABLE,
     "src/tap_dance.c" = ir.defines.TAP_DANCE_ENABLE,
@@ -23,6 +23,16 @@ let use_soft_serial = std.record.has_field "SPLIT_SOFT_SERIAL_PIN" ir.defines in
     "src/macro.c" = ir.defines.MACRO_KEYS_ENABLE,
     "src/caps_word.c" = ir.defines.CAPS_WORD_ENABLE,
     "src/soft_serial.c" = use_soft_serial,
+    "src/rgbled.c" = ir.defines.NEOPIXEL_ENABLE,
+    "src/WS2812/src/WS2812.c" = ir.defines.NEOPIXEL_ENABLE,
+    "src/WS2812/src/template/optionalLink_WS2812_P1_0.c" = (ir.defines.NEOPIXEL_PIN == "P1_0"),
+    "src/WS2812/src/template/optionalLink_WS2812_P1_1.c" = (ir.defines.NEOPIXEL_PIN == "P1_1"),
+    "src/WS2812/src/template/optionalLink_WS2812_P1_2.c" = (ir.defines.NEOPIXEL_PIN == "P1_2"),
+    "src/WS2812/src/template/optionalLink_WS2812_P1_3.c" = (ir.defines.NEOPIXEL_PIN == "P1_3"),
+    "src/WS2812/src/template/optionalLink_WS2812_P1_4.c" = (ir.defines.NEOPIXEL_PIN == "P1_4"),
+    "src/WS2812/src/template/optionalLink_WS2812_P1_5.c" = (ir.defines.NEOPIXEL_PIN == "P1_5"),
+    "src/WS2812/src/template/optionalLink_WS2812_P1_6.c" = (ir.defines.NEOPIXEL_PIN == "P1_6"),
+    "src/WS2812/src/template/optionalLink_WS2812_P1_7.c" = (ir.defines.NEOPIXEL_PIN == "P1_7"),
   },
   extra_periph_sources = as_sources
   {

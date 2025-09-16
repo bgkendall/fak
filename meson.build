@@ -1,7 +1,7 @@
 project('fak', 'c')
 
 cc_args = ['--opt-code-size']
-inc_dirs = ['src', 'src/inc']
+inc_dirs = ['src', 'src/inc', 'src/WS2812/src']
 
 sources_common = [
     'src/main.c',
@@ -63,7 +63,7 @@ foreach side : sides
     )
 
     sources = sources_common + [side_c]
-    
+
     if side == 'central'
         sources += sources_central
 

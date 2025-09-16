@@ -78,6 +78,8 @@ static void on_layer_state_change() {
 #endif
 
 
+#ifdef NEOPIXEL_ENABLE
+
     switch (get_highest_layer_idx())
     {
         case 1:
@@ -110,6 +112,26 @@ static void on_layer_state_change() {
             // neopixel_setPixelColor(5, 0x0000FF);
             break;
         }
+        case 4:
+        {
+            neopixel_setPixelColor(0, 0xFFFF00);
+            // neopixel_setPixelColor(1, 0x00FF00);
+            // neopixel_setPixelColor(2, 0x0000FF);
+            // neopixel_setPixelColor(3, 0xFF0000);
+            // neopixel_setPixelColor(4, 0x00FF00);
+            // neopixel_setPixelColor(5, 0x0000FF);
+            break;
+        }
+        case 5:
+        {
+            neopixel_setPixelColor(0, 0x00FFFF);
+            // neopixel_setPixelColor(1, 0x00FF00);
+            // neopixel_setPixelColor(2, 0x0000FF);
+            // neopixel_setPixelColor(3, 0xFF0000);
+            // neopixel_setPixelColor(4, 0x00FF00);
+            // neopixel_setPixelColor(5, 0x0000FF);
+            break;
+        }
         default:
         {
             neopixel_setPixelColor(0, 0x000000);
@@ -122,6 +144,8 @@ static void on_layer_state_change() {
         }
     }
     neopixel_show();
+
+#endif
 }
 
 void set_default_layer_idx(uint8_t layer_idx) {

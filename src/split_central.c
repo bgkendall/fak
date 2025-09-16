@@ -548,17 +548,19 @@ void keyboard_init() {
 
 
 
+#ifdef NEOPIXEL_ENABLE
 
     neopixel_begin();
     neopixel_setBrightness(255);
     neopixel_setPixelColor(0, 0xFFFFFF);
-    neopixel_setPixelColor(1, 0x000000);
-    neopixel_setPixelColor(2, 0x000000);
-    neopixel_setPixelColor(3, 0x000000);
-    neopixel_setPixelColor(4, 0x000000);
-    neopixel_setPixelColor(5, 0x000000);
+    // neopixel_setPixelColor(1, 0x000000);
+    // neopixel_setPixelColor(2, 0x000000);
+    // neopixel_setPixelColor(3, 0x000000);
+    // neopixel_setPixelColor(4, 0x000000);
+    // neopixel_setPixelColor(5, 0x000000);
     neopixel_show();
 
+#endif
 
 
 
