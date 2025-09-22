@@ -1,11 +1,14 @@
 #include "rgbled.h"
+#include "caps_word.h"
+#include "keymap.h"
+#include "WS2812.h"
 
 
-#define NUM_BYTES (NUM_LEDS*COLOR_PER_LEDS)
-#if NUM_BYTES > 255
-#   error "NUM_BYTES can not be larger than 255."
+#if NEOPIXEL_BUFFER_LEN > 255
+#   error "NEOPIXEL_BUFFER_LEN can not be larger than 255."
 #endif
-__xdata uint8_t ledData[NUM_BYTES];
+__xdata __at(XADDR_NEOPIXEL_BUFFER) uint8_t ledData[NEOPIXEL_BUFFER_LEN];
+
 
 /***********************************************************************/
 uint8_t neopixel_brightness = 255;
@@ -38,7 +41,7 @@ void neopixel_begin(void)
 
 void neopixel_show(void)
 {
-    NEOPIXEL_SHOW_FUNC(ledData, NUM_BYTES); //Possible to use other pins.
+    NEOPIXEL_SHOW_FUNC(ledData, NEOPIXEL_BUFFER_LEN); //Possible to use other pins.
 }
 
 void neopixel_setPixelColor(uint8_t i, uint32_t c)
@@ -54,4 +57,50 @@ void neopixel_setPixelColor(uint8_t i, uint32_t c)
 void neopixel_setBrightness(uint8_t b)
 {
     neopixel_brightness = b;
+}
+
+void neopixel_init(void)
+{
+    neopixel_begin();
+    neopixel_setBrightness(128);
+    neopixel_setPixelColor(0, 0xFFFFFF);
+    neopixel_show();
+}
+
+void neopixel_show_state(void)
+{
+    if (caps_word_active())
+    {
+        neopixel_setPixelColor(0, 0xFF1E1E);
+    }
+    else
+    {
+        switch (get_highest_layer_idx())
+        {
+            case 4:
+            case 5:
+            {
+                neopixel_setPixelColor(0, 0xFF4400);
+                break;
+            }
+            case 6:
+            case 7:
+            {
+                neopixel_setPixelColor(0, 0x00FF00);
+                break;
+            }
+            case 8:
+            {
+                neopixel_setPixelColor(0, 0xFF00FF);
+                break;
+            }
+            default:
+            {
+                neopixel_setPixelColor(0, 0x000000);
+                break;
+            }
+        }
+    }
+
+    neopixel_show();
 }

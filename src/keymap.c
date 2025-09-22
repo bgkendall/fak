@@ -74,77 +74,10 @@ static void on_layer_state_change() {
             layer_state &= ~(1 << cl->then_layer);
         }
     }
-
 #endif
 
-
 #ifdef NEOPIXEL_ENABLE
-
-    switch (get_highest_layer_idx())
-    {
-        case 1:
-        {
-            neopixel_setPixelColor(0, 0xFF0000);
-            // neopixel_setPixelColor(1, 0xFF8800);
-            // neopixel_setPixelColor(2, 0xFF8800);
-            // neopixel_setPixelColor(3, 0xFFFFFF);
-            // neopixel_setPixelColor(4, 0xFFFF00);
-            // neopixel_setPixelColor(5, 0x00FFFF);
-            break;
-        }
-        case 2:
-        {
-            neopixel_setPixelColor(0, 0x00FF00);
-            // neopixel_setPixelColor(1, 0x00FF00);
-            // neopixel_setPixelColor(2, 0x0000FF);
-            // neopixel_setPixelColor(3, 0xFF0000);
-            // neopixel_setPixelColor(4, 0x00FF00);
-            // neopixel_setPixelColor(5, 0x0000FF);
-            break;
-        }
-        case 3:
-        {
-            neopixel_setPixelColor(0, 0x0000FF);
-            // neopixel_setPixelColor(1, 0x00FF00);
-            // neopixel_setPixelColor(2, 0x0000FF);
-            // neopixel_setPixelColor(3, 0xFF0000);
-            // neopixel_setPixelColor(4, 0x00FF00);
-            // neopixel_setPixelColor(5, 0x0000FF);
-            break;
-        }
-        case 4:
-        {
-            neopixel_setPixelColor(0, 0xFFFF00);
-            // neopixel_setPixelColor(1, 0x00FF00);
-            // neopixel_setPixelColor(2, 0x0000FF);
-            // neopixel_setPixelColor(3, 0xFF0000);
-            // neopixel_setPixelColor(4, 0x00FF00);
-            // neopixel_setPixelColor(5, 0x0000FF);
-            break;
-        }
-        case 5:
-        {
-            neopixel_setPixelColor(0, 0x00FFFF);
-            // neopixel_setPixelColor(1, 0x00FF00);
-            // neopixel_setPixelColor(2, 0x0000FF);
-            // neopixel_setPixelColor(3, 0xFF0000);
-            // neopixel_setPixelColor(4, 0x00FF00);
-            // neopixel_setPixelColor(5, 0x0000FF);
-            break;
-        }
-        default:
-        {
-            neopixel_setPixelColor(0, 0x000000);
-            // neopixel_setPixelColor(1, 0x000000);
-            // neopixel_setPixelColor(2, 0x000000);
-            // neopixel_setPixelColor(3, 0x000000);
-            // neopixel_setPixelColor(4, 0x000000);
-            // neopixel_setPixelColor(5, 0x000000);
-            break;
-        }
-    }
-    neopixel_show();
-
+    neopixel_show_state();
 #endif
 }
 

@@ -267,11 +267,12 @@ let _central_defines = {
 
   STICKY_ENABLE = std.array.any (fun kc => kc.type == 'hold_tap && kc.data.tap.type == 'sticky) deep_keycodes,
 
-  NEOPIXEL_ENABLE = false,
-  NEOPIXEL_PIN      = if NEOPIXEL_ENABLE then "P1_2" else false,
-  NEOPIXEL_PIN_PORT = if NEOPIXEL_ENABLE then (std.string.split "_" NEOPIXEL_PIN |> std.array.at 0) ++ "_ADDR" else false,
-  NEOPIXEL_PIN_BIT  = if NEOPIXEL_ENABLE then  std.string.split "_" NEOPIXEL_PIN |> std.array.at 1  else false,
-  NUM_LEDS = 1,
+  NEOPIXEL_COUNT      = 1,
+  NEOPIXEL_ENABLE     = (NEOPIXEL_COUNT > 0),
+  NEOPIXEL_PIN        = if NEOPIXEL_ENABLE then "P1_2" else false,
+  NEOPIXEL_PIN_PORT   = if NEOPIXEL_ENABLE then (std.string.split "_" NEOPIXEL_PIN |> std.array.at 0) ++ "_ADDR" else false,
+  NEOPIXEL_PIN_BIT    = if NEOPIXEL_ENABLE then  std.string.split "_" NEOPIXEL_PIN |> std.array.at 1  else false,
+  NEOPIXEL_BUFFER_LEN = NEOPIXEL_COUNT * 3,
 
   CUSTOM_KEYS_ENABLE = is_custom_keys_used,
   FAK_KEYS_ENABLE = is_custom_keys_of_type_used 'fak,
@@ -396,7 +397,12 @@ in {
 }
 & util.record.only_if _central_defines.REPEAT_KEY_ENABLE {
   REPEAT_KEY = sizeof.uint8_t * 4,
-} in
+}
+& util.record.only_if (_central_defines.NEOPIXEL_BUFFER_LEN > 0) (
+  {
+    NEOPIXEL_BUFFER = sizeof.uint8_t * _central_defines.NEOPIXEL_BUFFER_LEN,
+  }
+) in
 
 let _xaddr_defines =
   let names = std.record.fields _xaddr_sizes in

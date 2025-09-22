@@ -15,27 +15,7 @@ void set_caps_word_state(__bit new_state)
         caps_word_state = new_state;
 
 #ifdef NEOPIXEL_ENABLE
-
-        if (caps_word_state)
-        {
-            neopixel_setPixelColor(0, 0xFFFFFF);
-            // neopixel_setPixelColor(1, 0xFF2222);
-            // neopixel_setPixelColor(2, 0xFF00FF);
-            // neopixel_setPixelColor(3, 0xFF2222);
-            // neopixel_setPixelColor(4, 0xFF00FF);
-            // neopixel_setPixelColor(5, 0xFF2222);
-        }
-        else
-        {
-            neopixel_setPixelColor(0, 0x000000);
-            // neopixel_setPixelColor(1, 0x000000);
-            // neopixel_setPixelColor(2, 0x000000);
-            // neopixel_setPixelColor(3, 0x000000);
-            // neopixel_setPixelColor(4, 0x000000);
-            // neopixel_setPixelColor(5, 0x000000);
-        }
-        neopixel_show();
-
+        neopixel_show_state();
 #endif
     }
 }
