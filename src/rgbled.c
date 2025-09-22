@@ -8,10 +8,10 @@
 #   error "NEOPIXEL_BUFFER_LEN can not be larger than 255."
 #endif
 __xdata __at(XADDR_NEOPIXEL_BUFFER) uint8_t ledData[NEOPIXEL_BUFFER_LEN];
+__xdata __at(XADDR_NEOPIXEL_BRIGHTNESS) uint8_t neopixel_brightness = 255;
 
 
 /***********************************************************************/
-uint8_t neopixel_brightness = 255;
 
 #define CONCAT(X, Y) CONCAT_(X, Y)
 #define CONCAT_(X, Y) X##Y

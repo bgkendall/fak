@@ -398,11 +398,10 @@ in {
 & util.record.only_if _central_defines.REPEAT_KEY_ENABLE {
   REPEAT_KEY = sizeof.uint8_t * 4,
 }
-& util.record.only_if (_central_defines.NEOPIXEL_BUFFER_LEN > 0) (
-  {
-    NEOPIXEL_BUFFER = sizeof.uint8_t * _central_defines.NEOPIXEL_BUFFER_LEN,
-  }
-) in
+& util.record.only_if (_central_defines.NEOPIXEL_BUFFER_LEN > 0) {
+  NEOPIXEL_BRIGHTNESS = sizeof.uint8_t,
+  NEOPIXEL_BUFFER = sizeof.uint8_t * _central_defines.NEOPIXEL_BUFFER_LEN,
+} in
 
 let _xaddr_defines =
   let names = std.record.fields _xaddr_sizes in
