@@ -29,9 +29,9 @@
 #ifdef SPLIT_SOFT_SERIAL_PIN
 #include "soft_serial.h"
 #endif
-
+#ifdef NEOPIXEL_ENABLE
 #include "rgbled.h"
-
+#endif
 
 
 __xdata __at(XADDR_LAST_TAP_TIMESTAMP) uint16_t last_tap_timestamp = 0;

@@ -1,6 +1,8 @@
 #include "keymap.h"
 
+#ifdef NEOPIXEL_ENABLE
 #include "rgbled.h"
+#endif
 
 #if LAYER_COUNT > 1
 __xdata __at(XADDR_LAYER_STATE) fak_layer_state_t layer_state = 0;
