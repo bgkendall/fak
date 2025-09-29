@@ -1,9 +1,12 @@
 #include "macro.h"
 #include "keyboard.h"
+#include "keymap.h"
 #include "time.h"
 #include "usb.h"
 
 // TODO: Macro processing should be non-blocking
+
+__xdata __at(XADDR_MACRO_LAYER_RELEASE_MODS) uint32_t macro_layer_release_mods;
 
 void macro_handle_key(uint16_t step_idx, uint8_t down) {
     fak_macro_step_t step;
@@ -42,6 +45,17 @@ void macro_handle_key(uint16_t step_idx, uint8_t down) {
         case MACRO_INST_WAIT:
             delay(arg);
             break;
+        case MACRO_INST_RELEASE_WITH_LAYER:
+            macro_layer_release_mods = arg;
+            break;
         }
+    }
+}
+
+void macro_handle_layer_change(void) {
+    if (macro_layer_release_mods) {
+        const uint8_t release_mods = (macro_layer_release_mods & KEY_CODE_TAP_MODS_MASK) >> 8;
+        force_release_mods(release_mods);
+        macro_layer_release_mods = 0;
     }
 }

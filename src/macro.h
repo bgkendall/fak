@@ -9,6 +9,7 @@
 #define MACRO_INST_TAP                3
 #define MACRO_INST_WAIT               4
 #define MACRO_INST_PAUSE_FOR_RELEASE  5
+#define MACRO_INST_RELEASE_WITH_LAYER 6
 
 typedef struct {
     uint8_t inst;
@@ -20,6 +21,7 @@ typedef struct {
 } fak_macro_step_t;
 
 void macro_handle_key(uint16_t custom_code, uint8_t down);
+void macro_handle_layer_change(void);
 
 extern __code fak_macro_step_t macro_steps[];
 extern __code uint32_t macro_step_args[];

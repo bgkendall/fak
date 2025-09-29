@@ -231,6 +231,7 @@ let _macro_steps =
       'tap => 3,
       'wait => 4,
       'pause_for_release => 5,
+      'release_with_layer => 6,
     } step.inst,
     arg_idx | Uint16 = util.array.index_of (encode_macro_step_arg step) _macro_step_args,
   } in
@@ -397,6 +398,9 @@ in {
 }
 & util.record.only_if _central_defines.REPEAT_KEY_ENABLE {
   REPEAT_KEY = sizeof.uint8_t * 4,
+}
+& util.record.only_if _central_defines.MACRO_KEYS_ENABLE {
+  MACRO_LAYER_RELEASE_MODS = sizeof.uint32_t,
 }
 & util.record.only_if (_central_defines.NEOPIXEL_BUFFER_LEN > 0) {
   NEOPIXEL_BRIGHTNESS = sizeof.uint8_t,

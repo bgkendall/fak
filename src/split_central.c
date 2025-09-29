@@ -118,14 +118,18 @@ static void register_mods(uint8_t mods, uint8_t down) {
     }
 }
 
-static void cancel_all_mods(void) {
+void force_release_mods(uint8_t mods) {
+    uint8_t new_mods = 0;
 
     for (uint8_t i = 0; i < 8; i++) {
-        strong_mods_ref_count[i] = 0;
+        if (mods & (1 << i)) {
+            strong_mods_ref_count[i] = 0;
+        }
+        new_mods |= ((strong_mods_ref_count[i] > 0) << i);
     }
 
-    if (USB_EP1I_read(0)) {
-        USB_EP1I_write(0, 0);
+    if (USB_EP1I_read(0) != new_mods) {
+        USB_EP1I_write(0, new_mods);
     }
 }
 
@@ -331,10 +335,6 @@ void handle_non_future(uint32_t key_code, uint8_t down) {
                 layer_state_on(hold_layer);
             } else {
                 layer_state_off(hold_layer);
-                if (hold_layer == 4 || hold_layer == 5)
-                {
-                    cancel_all_mods();
-                }
             }
         }
 #endif

@@ -459,10 +459,12 @@ macro.release [keycode]
 macro.tap [keycode]
 macro.wait [duration in ms, up to 65535]
 macro.pause_for_release
+macro.release_with_layer [keycode]
 ```
 
 - `tap` does a `press` then a `release` condensed into one step.
 - `pause_for_release` waits for the macro key to be released then runs the steps after it. There can be at most one of this in a macro. Two or more will lead to heat death of the universe.
+- `release_with_layer` will release the specified modifiers when the active layer changes.
 
 Parameterizing macros is immediately possible thanks to Nickel, so there is no need to learn any other constructs. The following is an example that emulates[^3] `SEND_STRING` from QMK. Unlike QMK, this is not a C macro. It's simply a Nickel function that takes in a string and returns a macro.
 

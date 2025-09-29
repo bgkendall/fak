@@ -1,5 +1,8 @@
 #include "keymap.h"
 
+#ifdef MACRO_KEYS_ENABLE
+#include "macro.h"
+#endif
 #ifdef NEOPIXEL_ENABLE
 #include "rgbled.h"
 #endif
@@ -78,6 +81,9 @@ static void on_layer_state_change() {
     }
 #endif
 
+#ifdef MACRO_KEYS_ENABLE
+    macro_handle_layer_change();
+#endif
 #ifdef NEOPIXEL_ENABLE
     neopixel_show_state();
 #endif

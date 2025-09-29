@@ -13,7 +13,7 @@ let mod_ = fun K => let K = fun mod => K { mods."%{mod}" = true } in {
 } in
 
 {
-  tap = let 
+  tap = let
     K = fun t d => { type = 'hold_tap, data.tap = { type = t, data = d } }
   in {
     none = K 'none {},
@@ -98,7 +98,7 @@ let mod_ = fun K => let K = fun mod => K { mods."%{mod}" = true } in {
     tlex = K 'transparent_layer_exit {},
     trans = K 'transparent {},
   },
-  
+
   hold = let
     K = fun t d => { type = 'hold_tap, data.hold = { type = t, data = d } }
   in {
@@ -112,7 +112,7 @@ let mod_ = fun K => let K = fun mod => K { mods."%{mod}" = true } in {
     tlex = fun b => K 'transparent_layer_exit { behavior = b },
     trans = K 'transparent {}
   },
-  
+
   td = {
     make = fun t b => {
       type = 'tap_dance,
@@ -135,7 +135,7 @@ let mod_ = fun K => let K = fun mod => K { mods."%{mod}" = true } in {
     require_prior_idle_ms = fun ms => { data.require_prior_idle_ms = ms },
   },
 
-  encoder = 
+  encoder =
     let make = fun i dir => {
       type = 'encoder,
       data = { index = i, direction = dir },
@@ -161,8 +161,9 @@ let mod_ = fun K => let K = fun mod => K { mods."%{mod}" = true } in {
     tap = fun kc => { inst = 'tap, arg.keycode = kc },
     wait = fun ms => { inst = 'wait, arg.duration_ms = ms },
     pause_for_release = { inst = 'pause_for_release, arg = {} },
+    release_with_layer = fun kc => { inst = 'release_with_layer, arg.keycode = kc },
   },
-  
+
   MO = fun i => hold.reg.layer i,
   LT = fun b i tap => hold.reg.behavior b & hold.reg.layer i & tap,
   LM = fun b i mods tap => LT b i tap,

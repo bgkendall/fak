@@ -65,7 +65,7 @@ in {
     | default = false,
 } in
 
-let rec Keycode = 
+let rec Keycode =
   let Holdable = {
     type | [| 'none, 'regular, 'nop, 'transparent_layer_exit, 'transparent |],
     data | (match {
@@ -85,9 +85,9 @@ let rec Keycode =
     }) type
   } in
 
-  let MacroSteps = 
+  let MacroSteps =
     let MacroStep = {
-      inst | [| 'press, 'release, 'tap, 'wait, 'pause_for_release |],
+      inst | [| 'press, 'release, 'tap, 'wait, 'pause_for_release, 'release_with_layer |],
       arg | (match {
         'pause_for_release => { none | Uint 0 | default = 0 },
         'wait => { duration_ms | Uint16 },
@@ -101,8 +101,15 @@ let rec Keycode =
         |> std.array.length
       ) <= 1)
     in
-    
-    std.contract.Sequence [ Array MacroStep, HasAtMostOnePauseForRelease ]
+
+    let HasAtMostOneReleaseWithLayer = std.contract.from_predicate (fun value =>
+      (value
+        |> std.array.filter (fun step => step.inst == 'release_with_layer)
+        |> std.array.length
+      ) <= 1)
+    in
+
+    std.contract.Sequence [ Array MacroStep, HasAtMostOnePauseForRelease, HasAtMostOneReleaseWithLayer ]
   in
 
   let Tappable = {
@@ -158,7 +165,7 @@ let Layer = (
   std.contract.Sequence [ Array Keycode, ValidLength ]
 ) in
 
-let Layers = 
+let Layers =
   let ValidLength = std.contract.from_predicate (fun layers =>
     let len = std.array.length layers in len > 0 && len <= MAX_LAYER_COUNT
   ) in
