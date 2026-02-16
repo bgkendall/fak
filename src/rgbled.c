@@ -69,11 +69,13 @@ void neopixel_init(void)
 
 void neopixel_show_state(void)
 {
+#ifdef CAPS_WORD_ENABLE
     if (caps_word_active())
     {
         neopixel_setPixelColor(0, 0xFF1E1E);
     }
     else
+#endif
     {
         switch (get_highest_layer_idx())
         {
